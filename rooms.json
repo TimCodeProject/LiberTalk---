@@ -1,0 +1,1243 @@
+{
+    "Tim": {
+        "type": "open",
+        "password": "",
+        "created_by": "Tim",
+        "created_at": "2025-08-23T19:34:59.858028",
+        "messages": [
+            {
+                "id": "afe6f90a-bda3-4671-aebc-1c8707e8b09a",
+                "username": "Tim",
+                "message": "",
+                "file": {
+                    "filename": "KFJ8EP917X9RWJR8KK9C0M7NJ0.jpeg",
+                    "path": "5bc151c488c94fa39949050e8fdcce6f_KFJ8EP917X9RWJR8KK9C0M7NJ0.jpeg",
+                    "type": "image/jpeg"
+                },
+                "timestamp": "2025-08-23T19:35:42.693113"
+            },
+            {
+                "id": "b832ff01-02f7-4bbb-9e4b-0027aaa6d613",
+                "username": "Tim",
+                "message": "",
+                "file": {
+                    "filename": "giphy.gif",
+                    "path": "12baf03d34eb402b8dca332d513ea3e4_giphy.gif",
+                    "type": "image/gif"
+                },
+                "timestamp": "2025-08-23T19:35:52.279547"
+            },
+            {
+                "id": "8088fff8-d35e-4e99-b3be-b38f60486c35",
+                "username": "Tim",
+                "message": "Привет гнида",
+                "file": null,
+                "timestamp": "2025-08-23T19:36:10.578162"
+            },
+            {
+                "id": "bd1258ef-60a6-4a07-8353-12cb5d1565ab",
+                "username": "Tim",
+                "message": "Ну привет даун",
+                "file": null,
+                "timestamp": "2025-08-23T19:36:21.019278"
+            },
+            {
+                "id": "2ca05ba0-aeb0-4c76-88a7-eea43b11eec0",
+                "username": "Tim2",
+                "message": "Hello",
+                "file": null,
+                "timestamp": "2025-08-23T19:37:04.960460"
+            },
+            {
+                "id": "bc1dcc5c-192e-44f0-aa0e-aaf4c90e9328",
+                "username": "Tim",
+                "message": "Как дела",
+                "file": null,
+                "timestamp": "2025-08-23T19:37:13.423032"
+            },
+            {
+                "id": "7916cd2f-78b2-4f3f-bd29-fb1c1d63c71e",
+                "username": "Tim",
+                "message": "",
+                "file": {
+                    "filename": "МедСОГЛ.pdf",
+                    "path": "034de97ee42e4630ad4d8f973805f05f_pdf",
+                    "type": "application/pdf"
+                },
+                "timestamp": "2025-08-23T19:37:32.185374"
+            },
+            {
+                "id": "2be62372-dd38-4bbf-a69a-bdc08bfb311f",
+                "username": "Tim",
+                "message": "",
+                "file": {
+                    "filename": "1482090571130488467.png",
+                    "path": "b7831fbefc864cfcb27ab7667c568681_1482090571130488467.png",
+                    "type": "image/png"
+                },
+                "timestamp": "2025-08-23T19:37:55.797198"
+            },
+            {
+                "id": "9418f92d-01fa-49a8-983f-822034cc462b",
+                "username": "Tim",
+                "message": "",
+                "file": {
+                    "filename": "D5K818WSHH37GHVC15J82Y1EW0.jpeg",
+                    "path": "36ca71dc637f47378f88a69ce78c5a86_D5K818WSHH37GHVC15J82Y1EW0.jpeg",
+                    "type": "image/jpeg"
+                },
+                "timestamp": "2025-08-23T19:53:14.831775"
+            },
+            {
+                "id": "24f0b70a-7e12-417e-8ed6-1bde6cea2440",
+                "username": "Tim",
+                "message": "",
+                "file": {
+                    "filename": "XFWPZ09PKYKVQY0Z2J5ZHDQ0Z0.jpeg",
+                    "path": "f737f83ba5db4379aa69c2164b156804_XFWPZ09PKYKVQY0Z2J5ZHDQ0Z0.jpeg",
+                    "type": "image/jpeg"
+                },
+                "timestamp": "2025-08-23T19:53:30.367794"
+            },
+            {
+                "id": "23bebfd1-a522-47e9-8ac3-afe70a08075f",
+                "username": "Tim",
+                "message": "Рисунок",
+                "file": {
+                    "filename": "feetgen-image-2025-08-23T03-50-53-586Z.png",
+                    "path": "007732b398da4f8e8b70dda834d355f0_feetgen-image-2025-08-23T03-50-53-586Z.png",
+                    "type": "image/png"
+                },
+                "timestamp": "2025-08-23T19:53:59.062741"
+            },
+            {
+                "id": "e67b6efb-fe0d-402d-91d8-5e9d123fdea4",
+                "username": "Tim",
+                "message": "",
+                "file": {
+                    "filename": "2025_08_21_12p_Kleki.png",
+                    "path": "d04cd02e7f3d484b8a619f20548463ad_2025_08_21_12p_Kleki.png",
+                    "type": "image/png"
+                },
+                "timestamp": "2025-08-23T19:54:54.026461"
+            },
+            {
+                "id": "bca444b8-204a-479b-aafb-62179ee7120d",
+                "username": "Tim",
+                "message": "",
+                "file": {
+                    "filename": "2025_08_21_11g_Kleki.png",
+                    "path": "cbd0c5b0341b4991891e4998127f0b74_2025_08_21_11g_Kleki.png",
+                    "type": "image/png"
+                },
+                "timestamp": "2025-08-23T19:55:33.428300"
+            },
+            {
+                "id": "65ac7637-f2b4-4810-a695-ac6e5929dec0",
+                "username": "Tim",
+                "message": "",
+                "file": null,
+                "timestamp": "2025-08-23T19:56:02.998709"
+            },
+            {
+                "id": "795e3c96-86c1-4344-8728-2ac3e5ad895a",
+                "username": "Tim",
+                "message": "",
+                "file": null,
+                "timestamp": "2025-08-23T19:56:40.287967"
+            },
+            {
+                "id": "bda4da86-fb23-4765-aee0-85b8fc576f5f",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "",
+                "file": {
+                    "filename": "2025_08_20_0nx_Kleki (1).png",
+                    "path": "e84cd1a2c61348078bca337d6ca0ff63_2025_08_20_0nx_Kleki_1.png",
+                    "type": "image/png"
+                },
+                "timestamp": "2025-08-23T20:05:29.946512",
+                "role": "admin"
+            },
+            {
+                "id": "afa1eb4e-6aae-4525-9025-c0eecf272d56",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "**Hello**",
+                "file": null,
+                "timestamp": "2025-08-23T21:38:39.960171",
+                "role": "admin"
+            },
+            {
+                "id": "afc9bb59-8d71-4ea6-b0ca-a4b1cdcc53e9",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "**Жир**",
+                "file": null,
+                "timestamp": "2025-08-23T21:38:49.638436",
+                "role": "admin"
+            },
+            {
+                "id": "70a03765-7899-4db6-ab9a-6a59dd0a3932",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "Веном",
+                "file": null,
+                "timestamp": "2025-08-23T21:38:59.578939",
+                "role": "admin"
+            },
+            {
+                "id": "78f28f63-15f9-454f-a62a-d53b70e25eeb",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "авав",
+                "file": null,
+                "timestamp": "2025-08-23T21:39:02.713711",
+                "role": "admin"
+            },
+            {
+                "id": "831ce200-fdac-4893-89b3-859faadbc769",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "",
+                "file": {
+                    "filename": "Maksim_-_Znaesh_li_ty_originalnyjj_minus_75103991.mp3",
+                    "path": "77b6c844e2e842f4a47c14363f2460d0_Maksim_-_Znaesh_li_ty_originalnyjj_minus_75103991.mp3",
+                    "type": "audio/mpeg"
+                },
+                "timestamp": "2025-08-23T21:40:11.436697",
+                "role": "admin"
+            },
+            {
+                "id": "1677c50f-b066-4616-9e71-5dd1f2d3b00c",
+                "type": "poll",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "question": "Ты пидор",
+                "options": [
+                    {
+                        "text": "ДА",
+                        "votes": 1,
+                        "voters": [
+                            "Окунь"
+                        ]
+                    },
+                    {
+                        "text": "ДА",
+                        "votes": 0,
+                        "voters": []
+                    }
+                ],
+                "total_votes": 1,
+                "voters": [
+                    "Окунь"
+                ],
+                "timestamp": "2025-08-23T23:33:57.027448",
+                "role": "user"
+            },
+            {
+                "id": "d3618ce3-5bb8-45d6-bfa0-3ed38e4f1c08",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "ll;",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:19.785635",
+                "role": "user"
+            },
+            {
+                "id": "d085218d-8e9d-47b7-a9d0-ed2bb48e8756",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "ll",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:22.204297",
+                "role": "user"
+            },
+            {
+                "id": "1e31dbb7-8c64-4bc6-b118-3f23b50a480e",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "l",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:22.980228",
+                "role": "user"
+            },
+            {
+                "id": "75118976-1c3d-437c-90d6-9a292d17d03f",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "l",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:23.412073",
+                "role": "user"
+            },
+            {
+                "id": "569ae6f5-cadc-4e52-971a-b3ff540f62cd",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:23.874774",
+                "role": "user"
+            },
+            {
+                "id": "af1583f6-d0ec-41db-9cf4-67c5121f5c54",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:24.169435",
+                "role": "user"
+            },
+            {
+                "id": "74e50836-7a07-4e72-bbc2-e726ba274b16",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:24.650185",
+                "role": "user"
+            },
+            {
+                "id": "64e04524-967e-4ee3-ba06-9554d21fc028",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "l",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:25.086890",
+                "role": "user"
+            },
+            {
+                "id": "edba4816-ede2-4896-875d-2a39ca85253c",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "l",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:25.561706",
+                "role": "user"
+            },
+            {
+                "id": "1d5b08a5-4884-4ea2-ac57-bff69cfc5a24",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "l",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:25.925338",
+                "role": "user"
+            },
+            {
+                "id": "6251a778-cd67-4bcd-aa65-4347888b571a",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "j",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:30.771238",
+                "role": "user"
+            },
+            {
+                "id": "96bcfebe-bc8c-4498-ba45-bce43dcb2b88",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "j",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:31.157861",
+                "role": "user"
+            },
+            {
+                "id": "73a1c624-40c4-479c-a628-ee0b5d5a0a55",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "j",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:31.582808",
+                "role": "user"
+            },
+            {
+                "id": "46966164-f4f8-4574-9871-41e11bf2798d",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "j",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:31.991227",
+                "role": "user"
+            },
+            {
+                "id": "30026f32-490c-43b8-a766-f9c449ee54f4",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:32.338800",
+                "role": "user"
+            },
+            {
+                "id": "6dd87443-b72b-4a42-a569-a1a05beb920c",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:32.629930",
+                "role": "user"
+            },
+            {
+                "id": "1b7ccc3b-8c3c-4e38-910b-62e9af574e70",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "j",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:33.086425",
+                "role": "user"
+            },
+            {
+                "id": "4e0355dc-476b-4883-a0a9-19cc93628ff1",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "h",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:33.546105",
+                "role": "user"
+            },
+            {
+                "id": "d5d8f84b-924a-4013-b27c-dfc1daba7f93",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:33.881401",
+                "role": "user"
+            },
+            {
+                "id": "46b1196f-6973-4dc3-a3f3-29b1ee00e490",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "h",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:34.191591",
+                "role": "user"
+            },
+            {
+                "id": "373a91f8-af53-4860-8eab-e8f8bec311e7",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "jh",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:34.539908",
+                "role": "user"
+            },
+            {
+                "id": "39c0ce72-0a50-4739-9b97-9199d64d7ff8",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "j",
+                "file": null,
+                "timestamp": "2025-08-23T23:34:35.106375",
+                "role": "user"
+            },
+            {
+                "id": "ba0a28c9-8409-4d2f-8345-f4b9263a0412",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "",
+                "file": {
+                    "filename": "2025_08_20_0nn_Kleki.png",
+                    "path": "854cbd3cd7d444b4a437b6f8a7f44836_2025_08_20_0nn_Kleki.png",
+                    "type": "image/png"
+                },
+                "timestamp": "2025-08-23T23:35:03.896939",
+                "role": "user"
+            },
+            {
+                "id": "451625cc-98a4-49bf-8b80-470470247cad",
+                "type": "poll",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "question": "Кончил",
+                "options": [
+                    {
+                        "text": "ДА",
+                        "votes": 1,
+                        "voters": [
+                            "Окунь"
+                        ]
+                    },
+                    {
+                        "text": "Не",
+                        "votes": 0,
+                        "voters": []
+                    }
+                ],
+                "total_votes": 1,
+                "voters": [
+                    "Окунь"
+                ],
+                "timestamp": "2025-08-23T23:35:34.155276",
+                "role": "user"
+            },
+            {
+                "id": "0b8063d7-cccc-41f4-9473-066cd92f89f7",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "па",
+                "file": null,
+                "timestamp": "2025-08-23T23:36:01.471469",
+                "role": "user"
+            },
+            {
+                "id": "237ecc12-bb55-49fa-b968-9e5258962b70",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "л",
+                "file": null,
+                "timestamp": "2025-08-23T23:36:11.926402",
+                "role": "user"
+            }
+        ],
+        "moderators": [],
+        "banned_users": [
+            "Tim2"
+        ]
+    },
+    "Tiнькоф": {
+        "type": "open",
+        "password": "2ert66op",
+        "created_by": "Tim",
+        "created_at": "2025-08-23T21:18:46.339414",
+        "moderators": [],
+        "banned_users": [
+            "Бадашко"
+        ],
+        "messages": [
+            {
+                "id": "c97eb8b3-62e8-4895-8651-c53b84368edd",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "Ghbsd",
+                "file": null,
+                "timestamp": "2025-08-23T21:23:34.920219",
+                "role": "admin"
+            },
+            {
+                "id": "beaf848f-f0a4-4335-b14a-fd3151ebf80f",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "Привет",
+                "file": null,
+                "timestamp": "2025-08-23T21:23:37.641997",
+                "role": "user"
+            },
+            {
+                "id": "a7583a0a-fa44-4c40-9fdd-65dcf81407a7",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "Я админ",
+                "file": null,
+                "timestamp": "2025-08-23T21:23:42.282634",
+                "role": "user"
+            },
+            {
+                "id": "d9e82749-4147-438b-83ad-ec2ffcbace5b",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "G",
+                "file": null,
+                "timestamp": "2025-08-23T21:36:10.523667",
+                "role": "user"
+            },
+            {
+                "id": "26e05384-d9fd-4817-b7d5-3a50eb34edfd",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "Привет даун",
+                "file": null,
+                "timestamp": "2025-08-23T21:52:42.200568",
+                "role": "admin"
+            },
+            {
+                "id": "cfdd83ce-fb62-49c4-9668-3a9aa83185e3",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "Йоу",
+                "file": null,
+                "timestamp": "2025-08-23T21:52:48.258068",
+                "role": "user"
+            },
+            {
+                "id": "0aebe788-8e4f-4144-88e0-432981efb244",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "ЭЭ хули удаляешь пидор",
+                "file": null,
+                "timestamp": "2025-08-23T21:53:14.348419",
+                "role": "admin"
+            },
+            {
+                "id": "0a0841e2-9049-49a8-9972-e2cecf1e766f",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "Ой",
+                "file": null,
+                "timestamp": "2025-08-23T21:53:18.627038",
+                "role": "admin"
+            },
+            {
+                "id": "d1d5f4e3-e8fc-4f94-b075-e37269a90b28",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "Это я должен говорить",
+                "file": null,
+                "timestamp": "2025-08-23T21:53:28.801359",
+                "role": "user"
+            },
+            {
+                "id": "3ad52132-1e15-472a-aeaa-eda4d5fef23b",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "Это я должен говорить",
+                "file": null,
+                "timestamp": "2025-08-23T21:53:28.803938",
+                "role": "user"
+            },
+            {
+                "id": "0fe05dce-163f-4f17-ab6c-d6cfcef988b1",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "АА",
+                "file": null,
+                "timestamp": "2025-08-23T21:53:32.644643",
+                "role": "user"
+            },
+            {
+                "id": "d69483ba-14aa-4699-ae37-6a452a540c14",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "в",
+                "file": null,
+                "timestamp": "2025-08-23T21:53:34.053822",
+                "role": "user"
+            },
+            {
+                "id": "190352e4-c0a6-4312-ab3a-23772674a280",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "Кошка МЯУ",
+                "file": {
+                    "filename": "6823055963.jpg",
+                    "path": "b6a96786414b4913a5299c5a04da2b23_6823055963.jpg",
+                    "type": "image/jpeg"
+                },
+                "timestamp": "2025-08-23T21:53:49.272631",
+                "role": "user"
+            },
+            {
+                "id": "10a51936-f32a-42dd-a798-9387b4cadcbf",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "вы",
+                "file": null,
+                "timestamp": "2025-08-23T21:54:21.081202",
+                "role": "moderator"
+            },
+            {
+                "id": "56a8091e-546c-4f56-a4e7-fc9ceeea42b1",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "пр",
+                "file": null,
+                "timestamp": "2025-08-24T12:02:14.727602",
+                "role": "user"
+            },
+            {
+                "id": "fd086092-72b0-4cf7-8435-5a150e91052d",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "привет",
+                "file": null,
+                "timestamp": "2025-08-24T12:02:30.311808",
+                "role": "user"
+            },
+            {
+                "id": "245f6f8a-d0b9-42c7-be02-5ebaedf2546d",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "как дела",
+                "file": null,
+                "timestamp": "2025-08-24T12:03:44.532986",
+                "role": "user"
+            },
+            {
+                "id": "f8384540-dabb-4542-8783-d8063e5afa0d",
+                "type": "text",
+                "username": "psyhelper",
+                "avatar": "psyhelper_9efc0548.jpg",
+                "message": "Привет",
+                "file": null,
+                "timestamp": "2025-08-24T12:07:28.863069",
+                "role": "user"
+            },
+            {
+                "id": "1ec4fd3a-59f6-44c3-8a10-bd9a69a6710a",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "Хуй",
+                "file": null,
+                "timestamp": "2025-08-24T12:07:45.766109",
+                "role": "user"
+            },
+            {
+                "id": "2d2fa089-0383-4a54-bf86-026e7577cfe9",
+                "type": "poll",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "question": "Ты пидор",
+                "options": [
+                    {
+                        "text": "ДА",
+                        "votes": 1,
+                        "voters": [
+                            "psyhelper"
+                        ]
+                    },
+                    {
+                        "text": "Сосал",
+                        "votes": 1,
+                        "voters": [
+                            "Окунь"
+                        ]
+                    }
+                ],
+                "total_votes": 2,
+                "voters": [
+                    "Окунь",
+                    "psyhelper"
+                ],
+                "timestamp": "2025-08-24T12:08:11.529424",
+                "role": "user"
+            },
+            {
+                "id": "c496f490-cc2c-4f8f-a939-1c8d2851bcae",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "",
+                "file": {
+                    "filename": "E.PNG",
+                    "path": "2c70c5093dda4b308ab71008b2e160f4_E.PNG",
+                    "type": "image/png"
+                },
+                "timestamp": "2025-08-24T12:08:29.141708",
+                "role": "user"
+            },
+            {
+                "id": "afb7d8f1-2fd5-4cdc-84f3-b15a725db3c7",
+                "type": "text",
+                "username": "psyhelper",
+                "avatar": "psyhelper_9efc0548.jpg",
+                "message": "р",
+                "file": null,
+                "timestamp": "2025-08-24T12:08:42.030899",
+                "role": "user"
+            },
+            {
+                "id": "42db9a35-dd19-4025-8a7d-dc79ee601b2c",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "",
+                "file": {
+                    "filename": "TimSlides.PNG",
+                    "path": "a7edcb1737444d28a497d852facb1bcd_TimSlides.PNG",
+                    "type": "image/png"
+                },
+                "timestamp": "2025-08-24T12:19:43.000562",
+                "role": "user"
+            }
+        ]
+    },
+    "Альцгеймер": {
+        "type": "closed",
+        "password": "2ert66op",
+        "created_by": "Tim",
+        "created_at": "2025-08-23T21:41:47.212382",
+        "moderators": [],
+        "banned_users": [],
+        "messages": [
+            {
+                "id": "f69f6abc-7925-4c10-b8f0-6691efafd4ad",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "Привет",
+                "file": null,
+                "timestamp": "2025-08-23T21:42:14.765597",
+                "role": "admin"
+            },
+            {
+                "id": "48be9477-5668-478c-bda8-0fc5cdf4afe0",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "",
+                "file": {
+                    "filename": "1eae15bd-no-bg-HD (carve.photos).png",
+                    "path": "e6ba67141af44ebe8c2f554aa97ad2fa_1eae15bd-no-bg-HD_carve.photos.png",
+                    "type": "image/png"
+                },
+                "timestamp": "2025-08-23T21:42:27.076987",
+                "role": "admin"
+            },
+            {
+                "id": "f8392c87-2f49-4b78-bae7-994ac96dd7e6",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "Типо стикер",
+                "file": null,
+                "timestamp": "2025-08-23T21:42:35.190478",
+                "role": "admin"
+            },
+            {
+                "id": "a28aa894-8c28-4360-b3a3-5facbde62818",
+                "username": "Tim",
+                "avatar": "default_avatar.jpg",
+                "message": "Типо стикер",
+                "file": null,
+                "timestamp": "2025-08-23T21:42:35.192957",
+                "role": "admin"
+            },
+            {
+                "id": "04bb8d92-8329-495c-904f-571e73927963",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "Типо я",
+                "file": null,
+                "timestamp": "2025-08-23T23:37:00.392875",
+                "role": "user"
+            },
+            {
+                "id": "d58430b3-6e2c-4a10-96b8-13c76c853097",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "Окунь чмо",
+                "file": null,
+                "timestamp": "2025-08-23T23:37:07.848808",
+                "role": "user"
+            }
+        ]
+    },
+    "Бадашко": {
+        "type": "open",
+        "password": "2ert66op",
+        "created_by": "Бадашко",
+        "created_at": "2025-08-23T21:58:11.943875",
+        "moderators": [],
+        "banned_users": [],
+        "messages": [
+            {
+                "id": "6fea27b9-c45b-49fd-be4f-310704f5fb4b",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "Привет",
+                "file": null,
+                "timestamp": "2025-08-23T21:58:19.271152",
+                "role": "admin"
+            },
+            {
+                "id": "7c9a4028-c00b-4ef2-9b20-7b46542d381f",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "Алле",
+                "file": null,
+                "timestamp": "2025-08-23T21:58:21.662204",
+                "role": "admin"
+            },
+            {
+                "id": "349b569a-0e35-42e0-866d-56a5fbde7b2d",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "Хуй",
+                "file": null,
+                "timestamp": "2025-08-23T21:58:23.409987",
+                "role": "admin"
+            },
+            {
+                "id": "cbc810ff-a9f4-466c-9afa-c7adb2f02b1f",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "Как дела",
+                "file": null,
+                "timestamp": "2025-08-23T21:58:28.773957",
+                "role": "admin"
+            },
+            {
+                "id": "d27b231b-3bcb-4f20-a570-15169597eb82",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "аа",
+                "file": null,
+                "timestamp": "2025-08-23T21:58:30.815025",
+                "role": "admin"
+            },
+            {
+                "id": "15b04a81-b304-47d4-b9f9-bdd074a76605",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "Бляяя\\",
+                "file": null,
+                "timestamp": "2025-08-23T21:58:42.649786",
+                "role": "admin"
+            },
+            {
+                "id": "afa3f568-d9e0-4a94-8693-2a0f3a7aa0f6",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "****`ль`",
+                "file": null,
+                "timestamp": "2025-08-23T21:58:52.080690",
+                "role": "admin"
+            },
+            {
+                "id": "1f8cf390-6fda-4a68-b43c-f1596ca60ea6",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "",
+                "file": {
+                    "filename": "My_k_vam_zaekhali_na_chas_-_minus_66705562.mp3",
+                    "path": "e807824259e54db8badeae030b5cae79_My_k_vam_zaekhali_na_chas_-_minus_66705562.mp3",
+                    "type": "audio/mpeg"
+                },
+                "timestamp": "2025-08-23T21:59:47.731403",
+                "role": "admin"
+            },
+            {
+                "id": "2a9c0af3-f206-49b7-9161-ece781a70ff5",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "",
+                "file": {
+                    "filename": "Mikhail_Boyarskijj_-_Zelenoglazoe_taksi_minus_76706830.mp3",
+                    "path": "caca35b98d14484aae07d5470287a622_Mikhail_Boyarskijj_-_Zelenoglazoe_taksi_minus_76706830.mp3",
+                    "type": "audio/mpeg"
+                },
+                "timestamp": "2025-08-23T22:00:00.339116",
+                "role": "admin"
+            },
+            {
+                "id": "12dcf34c-7eef-4844-a3e2-00aeaff3f60b",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "fky",
+                "file": null,
+                "timestamp": "2025-08-23T22:01:13.273325",
+                "role": "admin"
+            },
+            {
+                "id": "d7528d2c-d0a3-4999-a707-c4595f56d0fb",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "",
+                "file": null,
+                "timestamp": "2025-08-23T22:01:21.323100",
+                "role": "admin"
+            },
+            {
+                "id": "b68b74ea-af06-46dd-ac88-79ce0b274090",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "",
+                "file": {
+                    "filename": "Пример.pdf",
+                    "path": "98aebd6f88374328a89fc2e013652885_pdf",
+                    "type": "application/pdf"
+                },
+                "timestamp": "2025-08-23T22:01:28.173144",
+                "role": "admin"
+            },
+            {
+                "id": "63a49f2c-704c-4ba7-a85b-51aa467782a5",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "",
+                "file": null,
+                "timestamp": "2025-08-23T22:03:46.300248",
+                "role": "admin"
+            },
+            {
+                "id": "cdbfc62b-ef55-46bc-ba58-71e22b0e184e",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "",
+                "file": {
+                    "filename": "4b326129-c3b6-4c0c-9a2b-e86b9ee4f389.png",
+                    "path": "36ec4c6b7b974ceba619ee118da52e2a_4b326129-c3b6-4c0c-9a2b-e86b9ee4f389.png",
+                    "type": "image/png"
+                },
+                "timestamp": "2025-08-23T22:03:56.738156",
+                "role": "admin"
+            },
+            {
+                "id": "28371c3d-f82b-46fb-a563-c34cddf3b1c9",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "",
+                "file": {
+                    "filename": "2025_02_12_0jw_Kleki.png",
+                    "path": "27247c8b6e714a9592c744a45dbcbfad_2025_02_12_0jw_Kleki.png",
+                    "type": "image/png"
+                },
+                "timestamp": "2025-08-23T22:04:12.764661",
+                "role": "admin"
+            }
+        ]
+    },
+    "Картошка": {
+        "type": "open",
+        "password": "2ert66op",
+        "created_by": "Бадашко",
+        "created_at": "2025-08-23T22:16:32.586093",
+        "moderators": [],
+        "banned_users": [],
+        "messages": [
+            {
+                "id": "259f37cd-1535-4921-8407-9828c4738596",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "Привет",
+                "file": null,
+                "timestamp": "2025-08-23T22:16:59.022033",
+                "role": "admin"
+            },
+            {
+                "id": "beb334c2-640e-4326-8572-de2a6c5a2545",
+                "username": "Бадашко",
+                "avatar": "Бадашко_d0c3588b.jpg",
+                "message": "Фигурка",
+                "file": {
+                    "filename": "1eae15bd-no-bg-HD (carve.photos).png",
+                    "path": "00915e24f58d493d88b87644caea26a0_1eae15bd-no-bg-HD_carve.photos.png",
+                    "type": "image/png"
+                },
+                "timestamp": "2025-08-23T22:17:14.531904",
+                "role": "admin"
+            },
+            {
+                "id": "47b8fa95-a9a7-42ff-9438-9467b9ea0adc",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "",
+                "file": {
+                    "filename": "2b61489097ab940811758703fb86dc76.jpeg",
+                    "path": "6b88c8e8fac544fd9cf65d3fe7c37b05_2b61489097ab940811758703fb86dc76.jpeg",
+                    "type": "image/jpeg"
+                },
+                "timestamp": "2025-08-23T22:19:38.695764",
+                "role": "user"
+            },
+            {
+                "id": "b41e0df3-1deb-49f9-af64-f9ce04cce0d6",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "gf",
+                "file": null,
+                "timestamp": "2025-08-23T22:40:17.116357",
+                "role": "user"
+            },
+            {
+                "id": "7d9c7543-691f-4fb3-8a9c-a1fbd5ddc217",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "",
+                "file": null,
+                "timestamp": "2025-08-23T22:40:25.381598",
+                "role": "user"
+            },
+            {
+                "id": "2cda8f54-6062-4864-b398-a3f394d18be9",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "",
+                "file": null,
+                "timestamp": "2025-08-23T22:40:34.415790",
+                "role": "user"
+            },
+            {
+                "id": "d133b667-cb2c-4964-936a-52ad914497c9",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "",
+                "file": null,
+                "timestamp": "2025-08-23T22:40:35.771486",
+                "role": "user"
+            },
+            {
+                "id": "779a178a-3cb7-449b-8aae-0cf315e3c5ac",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": ";';",
+                "file": null,
+                "timestamp": "2025-08-23T22:40:37.830065",
+                "role": "user"
+            },
+            {
+                "id": "48cc767d-10a1-4bc0-a9ae-431ce3b7e543",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "",
+                "file": null,
+                "timestamp": "2025-08-23T22:40:44.573806",
+                "role": "user"
+            },
+            {
+                "id": "6fd8e8c6-795d-4c25-b040-8001afb3e69e",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "ds",
+                "file": null,
+                "timestamp": "2025-08-23T22:41:02.541706",
+                "role": "user"
+            },
+            {
+                "id": "4bd17c95-6a59-4858-8af4-141c66d65337",
+                "type": "poll",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "question": "Ты пидор",
+                "options": [
+                    {
+                        "text": "ДА",
+                        "votes": 1,
+                        "voters": [
+                            "Окунь"
+                        ]
+                    },
+                    {
+                        "text": "Нет",
+                        "votes": 0,
+                        "voters": []
+                    }
+                ],
+                "total_votes": 1,
+                "voters": [
+                    "Окунь"
+                ],
+                "timestamp": "2025-08-23T22:51:53.014248",
+                "role": "user"
+            },
+            {
+                "id": "4c6f24b6-8a42-4834-b15f-bd1fbb58658c",
+                "type": "voice",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "voice_path": "voice_f87e8fbbaff845598918403f1355e530_-_.mp3",
+                "duration": 30,
+                "timestamp": "2025-08-23T22:54:52.303830",
+                "role": "user"
+            },
+            {
+                "id": "38d68da9-8576-41e1-a2c1-3ec2fa9b09ef",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "Привет",
+                "file": null,
+                "timestamp": "2025-08-23T22:55:06.288331",
+                "role": "user"
+            }
+        ]
+    },
+    "Окунь": {
+        "type": "open",
+        "password": "2ert66op",
+        "created_by": "Окунь",
+        "created_at": "2025-08-24T11:41:45.842414",
+        "moderators": [],
+        "banned_users": [],
+        "messages": [
+            {
+                "id": "eb2a231d-2c2c-4ae4-82ae-67888c668ffa",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "Мем",
+                "file": {
+                    "filename": "1482090571130488467.png",
+                    "path": "0ec74a1f5da748f1b52f338e9dabf743_1482090571130488467.png",
+                    "type": "image/png"
+                },
+                "timestamp": "2025-08-24T11:42:56.434165",
+                "role": "admin"
+            },
+            {
+                "id": "8fe3bb87-2991-4abb-a23c-05325bb28240",
+                "type": "poll",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "question": "авы",
+                "options": [
+                    {
+                        "text": "авы",
+                        "votes": 1,
+                        "voters": [
+                            "Окунь"
+                        ]
+                    },
+                    {
+                        "text": "авы",
+                        "votes": 0,
+                        "voters": []
+                    }
+                ],
+                "total_votes": 1,
+                "voters": [
+                    "Окунь"
+                ],
+                "timestamp": "2025-08-24T11:45:43.573423",
+                "role": "admin"
+            },
+            {
+                "id": "9684787e-5c7b-4bf4-92a7-1856fb72287d",
+                "type": "text",
+                "username": "Окунь",
+                "avatar": "Окунь_acd2d457.jpg",
+                "message": "д",
+                "file": null,
+                "timestamp": "2025-08-24T11:45:55.706910",
+                "role": "admin"
+            }
+        ]
+    }
+}
