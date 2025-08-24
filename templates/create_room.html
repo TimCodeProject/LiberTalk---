@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Создать комнату{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold text-teal-400 mb-6 text-center">
+            <i class="fas fa-plus-circle mr-2"></i>Создать комнату
+        </h2>
+        
+        {% if error %}
+        <div class="bg-red-600 text-white p-3 rounded mb-4">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <form method="POST" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">Название комнаты</label>
+                <input type="text" name="room_name" required 
+                       class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">Тип комнаты</label>
+                <select name="room_type" 
+                        class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    <option value="open">Открытая</option>
+                    <option value="closed">Закрытая</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">Пароль (необязательно)</label>
+                <input type="password" name="password" 
+                       class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                <p class="text-sm text-gray-400 mt-1">Оставьте пустым, если не нужен пароль</p>
+            </div>
+            
+            <div class="flex space-x-4">
+                <a href="{{ url_for('dashboard') }}" 
+                   class="flex-1 bg-gray-600 hover:bg-gray-700 text-white text-center py-2 px-4 rounded">
+                    Назад
+                </a>
+                <button type="submit" 
+                        class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded">
+                    Создать
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

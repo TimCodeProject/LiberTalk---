@@ -1,0 +1,771 @@
+{% extends "base.html" %}
+
+{% block title %}Комната: {{ room_name }}{% endblock %}
+
+{% block content %}
+<div class="flex flex-col h-screen bg-gray-900">
+    <!-- Header -->
+    <div class="bg-gray-800 px-6 py-4 border-b border-gray-700 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <a href="{{ url_for('dashboard') }}" 
+               class="bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-lg transition-colors">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div>
+                <h1 class="text-xl font-bold text-teal-400">{{ room_name }}</h1>
+                <p class="text-sm text-gray-400">
+                    Создатель: {{ room_data.created_by }}
+                    {% if user_role == 'admin' %}
+                    <span class="ml-2 text-yellow-400"><i class="fas fa-crown"></i> Админ</span>
+                    {% elif user_role == 'moderator' %}
+                    <span class="ml-2 text-blue-400"><i class="fas fa-shield-alt"></i> Модератор</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        {% if is_admin %}
+        <a href="{{ url_for('room_admin', room_name=room_name) }}" 
+           class="bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded-lg flex items-center space-x-2 transition-colors">
+            <i class="fas fa-cog"></i>
+            <span>Управление</span>
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col md:flex-row">
+        <!-- Chat Messages -->
+        <div class="flex-1 flex flex-col bg-gray-800">
+            <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4">
+                {% if room_data.messages %}
+                    {% for message in room_data.messages %}
+                    <div class="message group relative bg-gray-700 p-4 rounded-lg hover:bg-gray-650 transition-colors"
+                         oncontextmenu="showMessageMenu(event, '{{ message.id }}', '{{ message.username }}', '{{ user_role }}', '{{ message.username == session.username }}')">
+                        
+                        <div class="flex space-x-3">
+                            <!-- Avatar -->
+                            <img src="{{ url_for('avatar_file', filename=message.avatar) }}" 
+                                 alt="{{ message.username }}" 
+                                 class="w-10 h-10 rounded-full object-cover flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                                 onclick="changeUserAvatar('{{ message.username }}')">
+                            
+                            <!-- Message Content -->
+                            <div class="flex-1 min-w-0">
+                                <!-- Header -->
+                                <div class="flex items-center space-x-2 mb-1">
+                                    <span class="font-semibold text-teal-300">{{ message.username }}</span>
+                                    
+                                    {% if message.role == 'admin' %}
+                                    <span class="text-xs bg-yellow-600 text-white px-2 py-1 rounded">
+                                        <i class="fas fa-crown mr-1"></i>Админ
+                                    </span>
+                                    {% elif message.role == 'moderator' %}
+                                    <span class="text-xs bg-blue-600 text-white px-2 py-1 rounded">
+                                        <i class="fas fa-shield-alt mr-1"></i>Модератор
+                                    </span>
+                                    {% endif %}
+                                    
+                                    <span class="text-xs text-gray-400">{{ message.timestamp[:16].replace('T', ' ') }}</span>
+                                    
+                                    {% if message.edited %}
+                                    <span class="text-xs text-gray-500">(ред.)</span>
+                                    {% endif %}
+                                </div>
+
+                                <!-- File Content -->
+                                {% if message.file %}
+                                <div class="mb-2">
+                                    {% if message.file.type and message.file.type.startswith('image/') %}
+                                    <img src="{{ url_for('uploaded_file', filename=message.file.path) }}" 
+                                         alt="{{ message.file.filename }}" 
+                                         class="max-w-xs rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                                         onclick="toggleImageSize(this)"
+                                         loading="lazy">
+                                    {% elif message.file.type and message.file.type.startswith('video/') %}
+                                    <div class="bg-black rounded-lg overflow-hidden">
+                                        <video controls class="max-w-xs" preload="metadata">
+                                            <source src="{{ url_for('uploaded_file', filename=message.file.path) }}" type="{{ message.file.type }}">
+                                            Ваш браузер не поддерживает видео.
+                                        </video>
+                                    </div>
+                                    {% elif message.file.type and message.file.type.startswith('audio/') %}
+                                    <div class="bg-gray-600 p-3 rounded-lg">
+                                        <audio controls class="w-full" preload="metadata">
+                                            <source src="{{ url_for('uploaded_file', filename=message.file.path) }}" type="{{ message.file.type }}">
+                                            Ваш браузер не поддерживает аудио.
+                                        </audio>
+                                        <p class="text-sm text-gray-300 mt-1">{{ message.file.filename }}</p>
+                                    </div>
+                                    {% else %}
+                                    <a href="{{ url_for('uploaded_file', filename=message.file.path) }}" 
+                                       class="inline-flex items-center space-x-2 bg-gray-600 hover:bg-gray-500 text-white p-3 rounded-lg transition-colors">
+                                        <i class="fas fa-file-download text-teal-400"></i>
+                                        <span>{{ message.file.filename }}</span>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+
+                                <!-- Новые типы сообщений -->
+                                {% if message.type == 'poll' %}
+                                <div class="bg-gray-700 p-4 rounded-lg mb-2 border-l-4 border-teal-500">
+                                    <div class="flex items-center space-x-2 mb-3">
+                                        <i class="fas fa-poll text-teal-400"></i>
+                                        <h4 class="text-white font-semibold">{{ message.question }}</h4>
+                                    </div>
+                                    
+                                    <div class="space-y-2">
+                                        {% for option in message.options %}
+                                        <div class="poll-option bg-gray-600 p-2 rounded" data-option-index="{{ loop.index0 }}">
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-white">{{ option.text }}</span>
+                                                <span class="text-teal-300 text-sm poll-percentage">
+                                                    {% if message.total_votes > 0 %}
+                                                    {{ ((option.votes / message.total_votes) * 100)|round|int }}%
+                                                    {% else %}0%{% endif %}
+                                                </span>
+                                            </div>
+                                            
+                                            <div class="w-full bg-gray-500 rounded-full h-2 mb-1">
+                                                <div class="bg-teal-400 h-2 rounded-full poll-bar transition-all duration-500" 
+                                                     style="width: {% if message.total_votes > 0 %}{{ ((option.votes / message.total_votes) * 100)|round|int }}{% else %}0{% endif %}%">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-teal-300 text-xs poll-votes">
+                                                    {{ option.votes }} голосов
+                                                </span>
+                                                {% if session.username not in message.voters %}
+                                                <button onclick="voteInPoll('{{ message.id }}', {{ loop.index0 }})" 
+                                                        class="text-xs bg-teal-600 hover:bg-teal-700 text-white px-3 py-1 rounded transition-colors">
+                                                    Голосовать
+                                                </button>
+                                                {% else %}
+                                                <span class="text-xs text-teal-300">✓ Ваш голос</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    
+                                    <div class="text-teal-300 text-xs mt-3 flex justify-between items-center">
+                                        <span>Всего голосов: {{ message.total_votes }}</span>
+                                        <span class="text-gray-400">{{ message.timestamp[:16].replace('T', ' ') }}</span>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <!-- Text Message -->
+                                {% if message.message and message.type != 'poll' %}
+                                <p class="text-white text-sm">{{ message.message }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Hover Actions -->
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="bg-gray-600 hover:bg-gray-500 text-white p-1 rounded"
+                                    onclick="replyToMessage('{{ message.username }}')"
+                                    title="Ответить">
+                                <i class="fas fa-reply text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-12">
+                        <i class="fas fa-comments text-4xl text-gray-600 mb-4"></i>
+                        <p class="text-gray-400">Здесь пока нет сообщений</p>
+                        <p class="text-sm text-gray-500 mt-1">Напишите первое сообщение!</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Message Input -->
+            <div class="bg-gray-750 border-t border-gray-600 p-4">
+                <!-- Reply Preview -->
+                <div id="replyPreview" class="hidden mb-3 bg-gray-700 p-3 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-teal-400">Ответ на сообщение</span>
+                            <span id="replyUsername" class="text-sm text-gray-300"></span>
+                        </div>
+                        <button onclick="cancelReply()" class="text-gray-400 hover:text-white">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Панель инструментов сообщений -->
+                <div class="flex items-center space-x-2 mb-3 bg-gray-700 p-3 rounded-lg">
+                    <button type="button" onclick="setMessageType('text')" 
+                            class="px-4 py-2 rounded bg-teal-600 hover:bg-teal-700 text-white transition-colors flex items-center"
+                            id="textTypeButton">
+                        <i class="fas fa-font mr-2"></i>Текст
+                    </button>
+                    
+                    <button type="button" onclick="setMessageType('poll')" 
+                            class="px-4 py-2 rounded bg-gray-600 hover:bg-teal-600 text-white transition-colors flex items-center"
+                            id="pollTypeButton">
+                        <i class="fas fa-poll mr-2"></i>Опрос
+                    </button>
+                    
+                    <span id="currentMessageType" class="text-sm text-teal-400 ml-2"></span>
+                </div>
+
+                <form id="messageForm" method="POST" enctype="multipart/form-data" class="space-y-3">
+                    <!-- File Upload Preview -->
+                    <div id="filePreview" class="hidden bg-gray-700 p-3 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <span id="fileName" class="text-sm text-teal-400"></span>
+                            <button type="button" onclick="clearFile()" class="text-gray-400 hover:text-white">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Форма для текстовых сообщений -->
+                    <div id="textMessageForm">
+                        <textarea name="message" placeholder="Напишите сообщение..." 
+                                 class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white"
+                                 rows="2" id="messageInput"></textarea>
+                    </div>
+
+                    <!-- Форма для создания опросов -->
+                    <div id="pollMessageForm" class="hidden">
+                        <div class="bg-gray-700 p-4 rounded-lg border border-gray-600">
+                            <input type="text" name="poll_question" placeholder="Вопрос опроса..." 
+                                   class="w-full bg-gray-600 border border-gray-500 rounded px-3 py-2 text-white mb-3 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                   id="pollQuestionInput">
+                            
+                            <div id="pollOptions">
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <input type="text" name="poll_options[]" placeholder="Вариант ответа 1" 
+                                           class="flex-1 bg-gray-600 border border-gray-500 rounded px-3 py-2 text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                                    <button type="button" onclick="addPollOption()" 
+                                            class="px-3 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded transition-colors">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <input type="text" name="poll_options[]" placeholder="Вариант ответа 2" 
+                                           class="flex-1 bg-gray-600 border border-gray-500 rounded px-3 py-2 text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                                    <button type="button" onclick="removePollOption(this)" 
+                                            class="px-3 py-2 bg-gray-600 hover:bg-red-600 text-white rounded transition-colors">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <p class="text-xs text-gray-400 mt-2">Минимум 2 варианта ответа, максимум 10</p>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="message_type" value="text" id="messageType">
+
+                    <div class="flex space-x-3">
+                        <!-- File Upload Button -->
+                        <label class="bg-gray-700 hover:bg-gray-600 text-white p-3 rounded-lg cursor-pointer transition-colors flex items-center">
+                            <i class="fas fa-paperclip mr-2"></i>
+                            <input type="file" name="file" id="fileInput" class="hidden" onchange="handleFileSelect(this)">
+                        </label>
+
+                        <!-- Send Button -->
+                        <button type="submit" 
+                                class="bg-teal-600 hover:bg-teal-700 text-white p-3 rounded-lg transition-colors flex items-center">
+                            <i class="fas fa-paper-plane mr-2"></i>Отправить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Online Users Sidebar (hidden on mobile) -->
+        <div class="hidden md:block w-80 bg-gray-800 border-l border-gray-700">
+            <div class="p-4 border-b border-gray-700">
+                <h3 class="font-semibold text-teal-400 mb-3">
+                    <i class="fas fa-users mr-2"></i>Участники
+                </h3>
+                
+                <div class="space-y-2">
+                    {% set unique_users = {} %}
+                    {% for message in room_data.messages %}
+                        {% if message.username not in unique_users %}
+                            {% set _ = unique_users.update({message.username: message.avatar}) %}
+                            <div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-700 transition-colors">
+                                <img src="{{ url_for('avatar_file', filename=message.avatar) }}" 
+                                     alt="{{ message.username }}" 
+                                     class="w-8 h-8 rounded-full object-cover">
+                                <span class="text-sm text-white">{{ message.username }}</span>
+                                {% if get_user_role(room_name, message.username) == 'admin' %}
+                                <span class="text-xs text-yellow-400"><i class="fas fa-crown"></i></span>
+                                {% elif get_user_role(room_name, message.username) == 'moderator' %}
+                                <span class="text-xs text-blue-400"><i class="fas fa-shield-alt"></i></span>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Context Menu -->
+<div id="messageMenu" class="fixed hidden bg-gray-800 border border-gray-600 rounded-lg shadow-xl z-50 min-w-48">
+    <div class="p-3 border-b border-gray-700">
+        <span id="menuTarget" class="text-sm text-teal-400"></span>
+    </div>
+    <div class="py-1">
+        <button onclick="replyToSelectedMessage()" class="w-full text-left px-4 py-2 text-sm hover:bg-gray-700">
+            <i class="fas fa-reply mr-2"></i>Ответить
+        </button>
+        <button id="editButton" onclick="editSelectedMessage()" class="w-full text-left px-4 py-2 text-sm hover:bg-gray-700 hidden">
+            <i class="fas fa-edit mr-2"></i>Редактировать
+        </button>
+        <button id="deleteButton" onclick="deleteSelectedMessage()" class="w-full text-left px-4 py-2 text-sm hover:bg-gray-700 text-red-400">
+            <i class="fas fa-trash mr-2"></i>Удалить
+        </button>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-gray-800 rounded-lg p-6 w-96">
+        <h3 class="text-lg font-semibold text-teal-400 mb-4">Редактирование сообщения</h3>
+        <textarea id="editText" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white mb-4 resize-none" rows="4"></textarea>
+        <div class="flex space-x-3">
+            <button onclick="saveEdit()" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-2 px-4 rounded-lg">
+                Сохранить
+            </button>
+            <button onclick="closeEditModal()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg">
+                Отмена
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Global variables
+let currentMessageId = null;
+let currentReplyTo = null;
+let currentEditId = null;
+
+// Auto-resize textarea
+function autoResize(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+}
+
+// File handling
+function handleFileSelect(input) {
+    const file = input.files[0];
+    if (file) {
+        const fileName = file.name;
+        const fileSize = (file.size / 1024 / 1024).toFixed(2);
+        
+        document.getElementById('fileName').textContent = `${fileName} (${fileSize} MB)`;
+        document.getElementById('filePreview').classList.remove('hidden');
+    }
+}
+
+function clearFile() {
+    document.getElementById('fileInput').value = '';
+    document.getElementById('filePreview').classList.add('hidden');
+}
+
+// Text formatting
+function formatText(type) {
+    const textarea = document.getElementById('messageInput');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+    
+    let formattedText = '';
+    switch(type) {
+        case 'bold':
+            formattedText = `**${selectedText}**`;
+            break;
+        case 'italic':
+            formattedText = `*${selectedText}*`;
+            break;
+        case 'code':
+            formattedText = `\`${selectedText}\``;
+            break;
+    }
+    
+    textarea.value = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
+    textarea.focus();
+    textarea.setSelectionRange(start + formattedText.length, start + formattedText.length);
+}
+
+// Reply system
+function replyToMessage(username) {
+    currentReplyTo = username;
+    document.getElementById('replyUsername').textContent = username;
+    document.getElementById('replyPreview').classList.remove('hidden');
+    document.getElementById('messageInput').focus();
+}
+
+function cancelReply() {
+    currentReplyTo = null;
+    document.getElementById('replyPreview').classList.add('hidden');
+}
+
+// Context menu
+function showMessageMenu(event, messageId, username, userRole, isOwnMessage) {
+    event.preventDefault();
+    
+    const menu = document.getElementById('messageMenu');
+    menu.style.left = event.pageX + 'px';
+    menu.style.top = event.pageY + 'px';
+    menu.classList.remove('hidden');
+    
+    document.getElementById('menuTarget').textContent = `Сообщение от ${username}`;
+    
+    // Show edit/delete buttons based on permissions
+    const editBtn = document.getElementById('editButton');
+    const deleteBtn = document.getElementById('deleteButton');
+    
+    editBtn.classList.add('hidden');
+    deleteBtn.classList.add('hidden');
+    
+    if (userRole === 'admin' || userRole === 'moderator' || isOwnMessage === 'True') {
+        if (isOwnMessage === 'True') {
+            editBtn.classList.remove('hidden');
+        }
+        deleteBtn.classList.remove('hidden');
+    }
+    
+    currentMessageId = messageId;
+}
+
+function replyToSelectedMessage() {
+    const username = document.getElementById('menuTarget').textContent.replace('Сообщение от ', '');
+    replyToMessage(username);
+    hideContextMenu();
+}
+
+function editSelectedMessage() {
+    const messageElement = document.querySelector(`[oncontextmenu*="${currentMessageId}"]`);
+    const messageText = messageElement.querySelector('p')?.textContent || '';
+    
+    document.getElementById('editText').value = messageText;
+    document.getElementById('editModal').classList.remove('hidden');
+    currentEditId = currentMessageId;
+    hideContextMenu();
+}
+
+function deleteSelectedMessage() {
+    if (confirm('Удалить это сообщение?')) {
+        fetch('/message_action/{{ room_name }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'delete',
+                message_id: currentMessageId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Ошибка удаления: ' + (data.error || 'Неизвестная ошибка'));
+            }
+        });
+    }
+    hideContextMenu();
+}
+
+function hideContextMenu() {
+    document.getElementById('messageMenu').classList.add('hidden');
+}
+
+// Edit modal functions
+function saveEdit() {
+    const newText = document.getElementById('editText').value.trim();
+    if (newText) {
+        fetch('/message_action/{{ room_name }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'edit',
+                message_id: currentEditId,
+                new_text: newText
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Ошибка редактирования: ' + (data.error || 'Неизвестная ошибка'));
+            }
+        });
+    }
+    closeEditModal();
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').classList.add('hidden');
+}
+
+// Media handling
+function toggleImageSize(img) {
+    img.classList.toggle('max-w-xs');
+    img.classList.toggle('max-w-full');
+    img.classList.toggle('max-h-96');
+}
+
+// Form submission
+document.getElementById('messageForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    if (currentReplyTo) {
+        formData.append('reply_to', currentReplyTo);
+    }
+    
+    fetch(window.location.href, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            this.reset();
+            document.getElementById('messageInput').style.height = 'auto';
+            clearFile();
+            cancelReply();
+            setMessageType('text'); // Reset to text mode
+            location.reload();
+        }
+    });
+});
+
+// Close context menu on click outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('#messageMenu')) {
+        hideContextMenu();
+    }
+});
+
+// Auto-scroll to bottom
+function scrollToBottom() {
+    const chat = document.getElementById('chatMessages');
+    chat.scrollTop = chat.scrollHeight;
+}
+
+// Poll for new messages
+setInterval(() => {
+    fetch('/get_messages/{{ room_name }}')
+        .then(response => response.json())
+        .then(messages => {
+            const currentCount = document.querySelectorAll('.message').length;
+            if (messages.length !== currentCount) {
+                location.reload();
+            }
+        })
+        .catch(error => console.error('Error fetching messages:', error));
+}, 3000);
+
+// Управление типами сообщений
+function setMessageType(type) {
+    document.getElementById('messageType').value = type;
+    
+    // Update button styles
+    document.getElementById('textTypeButton').classList.toggle('bg-teal-600', type === 'text');
+    document.getElementById('textTypeButton').classList.toggle('bg-gray-600', type !== 'text');
+    document.getElementById('pollTypeButton').classList.toggle('bg-teal-600', type === 'poll');
+    document.getElementById('pollTypeButton').classList.toggle('bg-gray-600', type !== 'poll');
+    
+    document.getElementById('currentMessageType').textContent = 
+        type === 'text' ? 'Режим: Текст' : 'Режим: Опрос';
+    
+    document.getElementById('textMessageForm').classList.toggle('hidden', type !== 'text');
+    document.getElementById('pollMessageForm').classList.toggle('hidden', type !== 'poll');
+}
+
+// Управление опросами
+function addPollOption() {
+    const optionsContainer = document.getElementById('pollOptions');
+    const optionCount = optionsContainer.children.length;
+    
+    if (optionCount >= 10) {
+        alert('Максимум 10 вариантов ответа');
+        return;
+    }
+    
+    const newOption = document.createElement('div');
+    newOption.className = 'flex items-center space-x-2 mb-2';
+    newOption.innerHTML = `
+        <input type="text" name="poll_options[]" placeholder="Вариант ответа ${optionCount + 1}" 
+               class="flex-1 bg-gray-600 border border-gray-500 rounded px-3 py-2 text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+        <button type="button" onclick="removePollOption(this)" 
+                class="px-3 py-2 bg-gray-600 hover:bg-red-600 text-white rounded transition-colors">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    
+    optionsContainer.appendChild(newOption);
+}
+
+function removePollOption(button) {
+    const optionsContainer = document.getElementById('pollOptions');
+    if (optionsContainer.children.length > 2) {
+        button.parentElement.remove();
+    } else {
+        alert('Опрос должен содержать минимум 2 варианта ответа');
+    }
+}
+
+// Голосование в опросах
+function voteInPoll(messageId, optionIndex) {
+    fetch(`/vote/{{ room_name }}/${messageId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ option_index: optionIndex })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updatePollDisplay(messageId, data.options, data.total_votes);
+        } else {
+            alert('Ошибка при голосовании: ' + data.error);
+        }
+    });
+}
+
+function updatePollDisplay(messageId, options, totalVotes) {
+    const pollElement = document.querySelector(`[data-poll-id="${messageId}"]`);
+    if (pollElement) {
+        options.forEach((option, index) => {
+            const percentage = totalVotes > 0 ? Math.round((option.votes / totalVotes) * 100) : 0;
+            const optionElement = pollElement.querySelector(`[data-option-index="${index}"]`);
+            
+            if (optionElement) {
+                optionElement.querySelector('.poll-percentage').textContent = `${percentage}%`;
+                optionElement.querySelector('.poll-bar').style.width = `${percentage}%`;
+                optionElement.querySelector('.poll-votes').textContent = `${option.votes} голосов`;
+                
+                // Update vote button
+                const voteButton = optionElement.querySelector('button');
+                if (voteButton) {
+                    voteButton.textContent = '✓ Ваш голос';
+                    voteButton.classList.remove('bg-teal-600', 'hover:bg-teal-700');
+                    voteButton.classList.add('bg-gray-600', 'cursor-default');
+                    voteButton.onclick = null;
+                }
+            }
+        });
+    }
+}
+
+// Initial setup
+window.addEventListener('load', function() {
+    scrollToBottom();
+    const textarea = document.getElementById('messageInput');
+    if (textarea) {
+        textarea.focus();
+    }
+    
+    // Initialize message type
+    setMessageType('text');
+});
+
+// Handle Enter key for sending (Shift+Enter for new line)
+const messageTextarea = document.getElementById('messageInput');
+if (messageTextarea) {
+    messageTextarea.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            document.getElementById('messageForm').dispatchEvent(new Event('submit'));
+        }
+    });
+}
+</script>
+
+<style>
+.bg-gray-650 {
+    background-color: #4B5563;
+}
+.bg-gray-750 {
+    background-color: #374151;
+}
+
+#chatMessages {
+    scrollbar-width: thin;
+    scrollbar-color: #0D9489 #374151;
+}
+
+#chatMessages::-webkit-scrollbar {
+    width: 6px;
+}
+
+#chatMessages::-webkit-scrollbar-track {
+    background: #374151;
+}
+
+#chatMessages::-webkit-scrollbar-thumb {
+    background: #0D9489;
+    border-radius: 3px;
+}
+
+#chatMessages::-webkit-scrollbar-thumb:hover {
+    background: #0F766E;
+}
+
+.message {
+    transition: all 0.2s ease;
+}
+
+@media (max-width: 768px) {
+    .flex-col {
+        flex-direction: column;
+    }
+    
+    #chatMessages {
+        padding: 2rem 1rem;
+    }
+    
+    .bg-gray-750 {
+        padding: 1rem;
+    }
+    
+    .poll-option {
+        font-size: 0.9rem;
+    }
+}
+
+/* Стили для опросов */
+.poll-bar {
+    transition: width 0.5s ease;
+}
+
+.poll-option {
+    transition: all 0.3s ease;
+}
+
+.poll-option:hover {
+    background-color: #4B5563 !important;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.message {
+    animation: fadeIn 0.3s ease-out;
+}
+</style>
+{% endblock %}

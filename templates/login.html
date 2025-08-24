@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-10">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold text-teal-400 mb-6 text-center">
+            <i class="fas fa-sign-in-alt mr-2"></i>Вход в LiberTalk
+        </h2>
+        
+        {% if error %}
+        <div class="bg-red-600 text-white p-3 rounded mb-4">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <form method="POST" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">Никнейм</label>
+                <input type="text" name="username" required 
+                       class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">Пароль</label>
+                <input type="password" name="password" required 
+                       class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500">
+            </div>
+            
+            <button type="submit" 
+                    class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded">
+                <i class="fas fa-sign-in-alt mr-2"></i>Войти
+            </button>
+        </form>
+        
+        <div class="mt-4 text-center">
+            <span class="text-gray-400">Нет аккаунта? </span>
+            <a href="{{ url_for('register') }}" class="text-teal-400 hover:text-teal-300">
+                Зарегистрироваться
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

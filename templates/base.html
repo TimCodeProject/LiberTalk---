@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiberTalk - {% block title %}{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-gray-900 text-white">
+    <nav class="bg-gray-800 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{{ url_for('dashboard') }}" class="text-2xl font-bold text-teal-400">
+                <i class="fas fa-comments mr-2"></i>LiberTalk
+            </a>
+            {% if 'username' in session %}
+            <div class="flex items-center space-x-4">
+                <div class="relative" id="avatarContainer">
+                    <img src="{{ url_for('avatar_file', filename=session.get('avatar', 'default_avatar.jpg')) }}" 
+                         alt="{{ session.username }}" 
+                         class="w-10 h-10 rounded-full object-cover cursor-pointer border-2 border-teal-400"
+                         id="avatarImage"
+                         onmouseenter="showAvatarMenu()">
+                    <div class="absolute hidden right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg z-10" 
+                         id="avatarMenu"
+                         onmouseleave="hideAvatarMenu()">
+                        <div class="p-3 text-center border-b border-gray-700">
+                            <span class="text-teal-300">{{ session.username }}</span>
+                        </div>
+                        <button onclick="changeAvatar()" class="w-full text-left px-4 py-2 text-sm hover:bg-gray-700">
+                            <i class="fas fa-camera mr-2"></i>Сменить аватар
+                        </button>
+                    </div>
+                </div>
+                <span class="text-teal-300">Привет, {{ session.username }}</span>
+                <a href="{{ url_for('logout') }}" class="bg-teal-600 hover:bg-teal-700 px-4 py-2 rounded">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Выйти
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    
+    <script>
+    let avatarMenuTimeout = null;
+    let isAvatarMenuVisible = false;
+
+    function showAvatarMenu() {
+        clearTimeout(avatarMenuTimeout);
+        const menu = document.getElementById('avatarMenu');
+        menu.classList.remove('hidden');
+        isAvatarMenuVisible = true;
+        
+        // Добавляем обработчик для всей страницы
+        document.addEventListener('mousemove', checkMousePosition);
+    }
+
+    function hideAvatarMenu() {
+        // Устанавливаем задержку перед скрытием
+        avatarMenuTimeout = setTimeout(() => {
+            if (isAvatarMenuVisible) {
+                const menu = document.getElementById('avatarMenu');
+                menu.classList.add('hidden');
+                isAvatarMenuVisible = false;
+                document.removeEventListener('mousemove', checkMousePosition);
+            }
+        }, 300);
+    }
+
+    function cancelHideAvatarMenu() {
+        clearTimeout(avatarMenuTimeout);
+    }
+
+    function checkMousePosition(event) {
+        const avatarImage = document.getElementById('avatarImage');
+        const avatarMenu = document.getElementById('avatarMenu');
+        
+        const avatarRect = avatarImage.getBoundingClientRect();
+        const menuRect = avatarMenu.getBoundingClientRect();
+        
+        const mouseX = event.clientX;
+        const mouseY = event.clientY;
+        
+        // Проверяем, находится ли курсор над аватаркой или меню
+        const isOverAvatar = (
+            mouseX >= avatarRect.left &&
+            mouseX <= avatarRect.right &&
+            mouseY >= avatarRect.top &&
+            mouseY <= avatarRect.bottom
+        );
+        
+        const isOverMenu = (
+            mouseX >= menuRect.left &&
+            mouseX <= menuRect.right &&
+            mouseY >= menuRect.top &&
+            mouseY <= menuRect.bottom
+        );
+        
+        if (!isOverAvatar && !isOverMenu && isAvatarMenuVisible) {
+            hideAvatarMenu();
+        }
+    }
+
+    function changeAvatar() {
+        // Здесь будет функционал смены аватарки
+        alert('Функция смены аватарки будет реализована позже');
+        hideAvatarMenu();
+    }
+
+    // Обработчики для меню
+    const avatarMenu = document.getElementById('avatarMenu');
+    if (avatarMenu) {
+        avatarMenu.addEventListener('mouseenter', cancelHideAvatarMenu);
+        avatarMenu.addEventListener('mouseleave', hideAvatarMenu);
+    }
+
+    // Обработчик для аватарки
+    const avatarImage = document.getElementById('avatarImage');
+    if (avatarImage) {
+        avatarImage.addEventListener('mouseleave', function() {
+            // Не скрываем сразу, ждем проверки положения курсора
+            setTimeout(hideAvatarMenu, 100);
+        });
+    }
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,219 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-10">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold text-teal-400 mb-6 text-center">
+            <i class="fas fa-user-plus mr-2"></i>Регистрация
+        </h2>
+        
+        {% if error %}
+        <div class="bg-red-600 text-white p-3 rounded mb-4">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <form method="POST" class="space-y-4" enctype="multipart/form-data" id="registerForm">
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">Никнейм</label>
+                <input type="text" name="username" required 
+                       class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">Пароль</label>
+                <input type="password" name="password" required 
+                       class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">Подтвердите пароль</label>
+                <input type="password" name="confirm_password" required 
+                       class="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500">
+            </div>
+            
+            <!-- Выбор аватарки -->
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-3">Аватарка</label>
+                
+                <!-- Предпросмотр аватарки -->
+                <div class="mb-4 text-center">
+                    <div id="avatarPreview" class="w-20 h-20 rounded-full bg-teal-600 mx-auto mb-2 flex items-center justify-center text-white text-2xl">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <p id="avatarStatus" class="text-xs text-gray-400">Без аватарки</p>
+                </div>
+                
+                <!-- Стандартные аватарки -->
+                <div class="mb-3">
+                    <p class="text-sm text-gray-300 mb-2">Выберите стандартную аватарку:</p>
+                    <div class="grid grid-cols-4 gap-2">
+                        {% set avatars = ['avatar1.png', 'avatar2.png', 'avatar3.png', 'avatar4.png'] %}
+                        {% for avatar in avatars %}
+                        <button type="button" onclick="selectAvatar('{{ avatar }}')" 
+                                class="w-12 h-12 rounded-full overflow-hidden border-2 border-gray-600 hover:border-teal-400 focus:outline-none">
+                            <img src="{{ url_for('static', filename='avatars/' + avatar) }}" 
+                                 alt="Avatar {{ loop.index }}"
+                                 class="w-full h-full object-cover">
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Загрузка своей аватарки -->
+                <div class="mb-3">
+                    <p class="text-sm text-gray-300 mb-2">Или загрузите свою:</p>
+                    <label class="block bg-gray-700 border border-gray-600 rounded px-3 py-2 cursor-pointer hover:bg-gray-600 transition-colors">
+                        <i class="fas fa-upload mr-2"></i>Выбрать файл
+                        <input type="file" name="avatar_file" accept="image/*" class="hidden" 
+                               onchange="handleAvatarUpload(this)" id="avatarUpload">
+                    </label>
+                    <p class="text-xs text-gray-400 mt-1">JPG, PNG или GIF, макс. 2MB</p>
+                </div>
+                
+                <!-- Кнопка Без аватарки -->
+                <div>
+                    <button type="button" onclick="removeAvatar()" 
+                            class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded text-sm">
+                        <i class="fas fa-times mr-2"></i>Без аватарки
+                    </button>
+                </div>
+                
+                <input type="hidden" name="avatar_selected" id="avatarSelected" value="">
+            </div>
+            
+            <button type="submit" 
+                    class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded">
+                <i class="fas fa-user-plus mr-2"></i>Зарегистрироваться
+            </button>
+        </form>
+        
+        <div class="mt-4 text-center">
+            <span class="text-gray-400">Уже есть аккаунт? </span>
+            <a href="{{ url_for('login') }}" class="text-teal-400 hover:text-teal-300">
+                Войти
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentAvatar = null;
+let uploadedAvatar = null;
+
+function selectAvatar(avatarName) {
+    currentAvatar = avatarName;
+    uploadedAvatar = null;
+    
+    // Обновляем предпросмотр
+    const preview = document.getElementById('avatarPreview');
+    preview.innerHTML = `<img src="{{ url_for('static', filename='avatars/') }}${avatarName}" 
+                            class="w-full h-full object-cover rounded-full">`;
+    
+    document.getElementById('avatarStatus').textContent = 'Стандартная аватарка';
+    document.getElementById('avatarSelected').value = avatarName;
+    
+    // Сбрасываем поле загрузки файла
+    document.getElementById('avatarUpload').value = '';
+}
+
+function handleAvatarUpload(input) {
+    const file = input.files[0];
+    if (file) {
+        // Проверяем размер файла
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Файл слишком большой! Максимальный размер: 2MB');
+            input.value = '';
+            return;
+        }
+        
+        // Проверяем тип файла
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!validTypes.includes(file.type)) {
+            alert('Неподдерживаемый формат файла! Используйте JPG, PNG или GIF.');
+            input.value = '';
+            return;
+        }
+        
+        // Создаем предпросмотр
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('avatarPreview');
+            preview.innerHTML = `<img src="${e.target.result}" 
+                                    class="w-full h-full object-cover rounded-full">`;
+            
+            document.getElementById('avatarStatus').textContent = 'Загруженная аватарка';
+            document.getElementById('avatarSelected').value = '';
+            
+            currentAvatar = null;
+            uploadedAvatar = file;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function removeAvatar() {
+    currentAvatar = null;
+    uploadedAvatar = null;
+    
+    const preview = document.getElementById('avatarPreview');
+    preview.innerHTML = '<i class="fas fa-user"></i>';
+    preview.className = 'w-20 h-20 rounded-full bg-teal-600 mx-auto mb-2 flex items-center justify-center text-white text-2xl';
+    
+    document.getElementById('avatarStatus').textContent = 'Без аватарки';
+    document.getElementById('avatarSelected').value = '';
+    document.getElementById('avatarUpload').value = '';
+}
+
+// Обработка отправки формы
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+    // Если есть загруженный файл, добавляем его в FormData
+    if (uploadedAvatar) {
+        const formData = new FormData(this);
+        formData.append('avatar_file_upload', uploadedAvatar);
+        
+        // Отправляем форму через fetch
+        e.preventDefault();
+        
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                return response.text();
+            }
+        })
+        .then(html => {
+            if (html) {
+                document.body.innerHTML = html;
+            }
+        });
+    }
+    // Если выбрана стандартная аватарка или нет аватарки, форма отправится нормально
+});
+</script>
+
+<style>
+button:focus {
+    outline: 2px solid #0D9489;
+    outline-offset: 2px;
+}
+
+#avatarPreview {
+    transition: all 0.3s ease;
+}
+
+#avatarPreview img {
+    transition: transform 0.3s ease;
+}
+
+#avatarPreview:hover img {
+    transform: scale(1.1);
+}
+</style>
+{% endblock %}

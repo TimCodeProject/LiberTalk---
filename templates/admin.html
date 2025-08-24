@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Управление комнатой: {{ room_name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-gray-800 p-6 rounded-lg">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-teal-400">
+                <i class="fas fa-cog mr-2"></i>Управление комнатой: {{ room_name }}
+            </h2>
+            <a href="{{ url_for('room', room_name=room_name) }}" 
+               class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded">
+                <i class="fas fa-arrow-left mr-2"></i>Назад в чат
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Участники комнаты -->
+            <div class="bg-gray-700 p-4 rounded-lg">
+                <h3 class="text-xl font-bold text-teal-400 mb-4">
+                    <i class="fas fa-users mr-2"></i>Участники
+                </h3>
+                <div class="space-y-3 max-h-96 overflow-y-auto">
+                    {% for username, user_data in users.items() %}
+                    <div class="flex items-center justify-between bg-gray-600 p-3 rounded">
+                        <div class="flex items-center space-x-3">
+                            <img src="{{ url_for('avatar_file', filename=user_data.avatar) }}" 
+                                 alt="{{ username }}" 
+                                 class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <span class="font-semibold">{{ username }}</span>
+                                <div class="text-sm text-gray-400">
+                                    {% if user_data.role == 'admin' %}
+                                    <span class="text-yellow-400"><i class="fas fa-crown mr-1"></i>Админ</span>
+                                    {% elif user_data.role == 'moderator' %}
+                                    <span class="text-blue-400"><i class="fas fa-shield-alt mr-1"></i>Модератор</span>
+                                    {% else %}
+                                    <span class="text-green-400"><i class="fas fa-user mr-1"></i>Участник</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-2">
+                            {% if user_data.role != 'admin' and (is_creator or user_data.role != 'moderator') %}
+                            <button onclick="adminAction('moderator', '{{ username }}')" 
+                                    class="p-2 bg-blue-600 hover:bg-blue-700 rounded-full"
+                                    title="Сделать модератором">
+                                <i class="fas fa-crown"></i>
+                            </button>
+                            {% endif %}
+                            
+                            {% if user_data.role != 'admin' and (is_creator or user_data.role != 'moderator') %}
+                            <button onclick="adminAction('ban', '{{ username }}')" 
+                                    class="p-2 bg-red-600 hover:bg-red-700 rounded-full"
+                                    title="Забанить">
+                                <i class="fas fa-hammer"></i>
+                            </button>
+                            {% endif %}
+                            
+                            {% if user_data.role != 'admin' %}
+                            <button onclick="adminAction('kick', '{{ username }}')" 
+                                    class="p-2 bg-orange-600 hover:bg-orange-700 rounded-full"
+                                    title="Кикнуть">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Действия администратора -->
+            <div class="bg-gray-700 p-4 rounded-lg">
+                <h3 class="text-xl font-bold text-teal-400 mb-4">
+                    <i class="fas fa-tools mr-2"></i>Действия
+                </h3>
+                
+                <div class="space-y-4">
+                    <button onclick="adminAction('clear_chat', '')" 
+                            class="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded flex items-center justify-center">
+                        <i class="fas fa-broom mr-2"></i>Очистить чат
+                    </button>
+                    
+                    <div class="bg-gray-600 p-3 rounded">
+                        <h4 class="font-semibold text-teal-300 mb-2">Легенда действий:</h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-crown text-xs"></i>
+                                </div>
+                                <span>Назначить/снять модератора</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-hammer text-xs"></i>
+                                </div>
+                                <span>Забанить пользователя</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 bg-orange-600 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-trash text-xs"></i>
+                                </div>
+                                <span>Кикнуть пользователя</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function adminAction(action, targetUser) {
+    if (action === 'ban' && !confirm('Вы уверены, что хотите забанить этого пользователя?')) {
+        return;
+    }
+    if (action === 'clear_chat' && !confirm('Вы уверены, что хотите очистить весь чат?')) {
+        return;
+    }
+    
+    fetch('/admin_action/{{ room_name }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            action: action,
+            target_user: targetUser
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Действие выполнено успешно!');
+            location.reload();
+        } else {
+            alert('Ошибка: ' + (data.error || 'Неизвестная ошибка'));
+        }
+    })
+    .catch(error => {
+        alert('Ошибка сети: ' + error);
+    });
+}
+</script>
+{% endblock %}
