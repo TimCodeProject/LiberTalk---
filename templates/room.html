@@ -161,15 +161,34 @@
                                 {% if message.message and message.type != 'poll' %}
                                 <p class="text-white text-sm">{{ message.message }}</p>
                                 {% endif %}
+
+                                <!-- Эмодзи-реакции -->
+                                {% if message.reactions %}
+                                <div class="mt-2 flex flex-wrap gap-1">
+                                    {% for emoji, reactors in message.reactions.items() %}
+                                    <button onclick="toggleReaction('{{ message.id }}', '{{ emoji }}')" 
+                                            class="bg-gray-600 hover:bg-gray-500 px-2 py-1 rounded-md text-sm transition-colors flex items-center space-x-1 
+                                                   {% if session.username in reactors %}border border-teal-400{% endif %}">
+                                        <span class="emoji">{{ emoji }}</span>
+                                        <span class="text-teal-300">{{ reactors|length }}</span>
+                                    </button>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
 
                         <!-- Hover Actions -->
-                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex space-x-1">
                             <button class="bg-gray-600 hover:bg-gray-500 text-white p-1 rounded"
                                     onclick="replyToMessage('{{ message.username }}')"
                                     title="Ответить">
                                 <i class="fas fa-reply text-xs"></i>
+                            </button>
+                            <button class="bg-gray-600 hover:bg-gray-500 text-white p-1 rounded"
+                                    onclick="showEmojiPicker('{{ message.id }}')"
+                                    title="Добавить реакцию">
+                                <i class="fas fa-smile text-xs"></i>
                             </button>
                         </div>
                     </div>
@@ -347,11 +366,61 @@
     </div>
 </div>
 
+<!-- Emoji Picker Modal -->
+<div id="emojiPickerModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-gray-800 rounded-lg p-4 w-80">
+        <h3 class="text-lg font-semibold text-teal-400 mb-3">Выберите эмодзи</h3>
+        
+        <div class="grid grid-cols-8 gap-2 mb-4 max-h-60 overflow-y-auto">
+            {% for emoji in ['👍', '👎', '❤️', '🔥', '🥰', '👏', '😁', '🤔', '🤯', '😢', '😡', '🎉', '🤩', '👻', '🙈', '💩', 
+'😊', '😂', '😍', '😐', '😣', '😫', '😒', '😑', '😕', '🙁', 
+'😞', '😰', '😱', '😨', '😧', '😦', '😮', '😯', 
+'🤡', '😺', '😼', '🙀', '😸', '😹', 
+'👶', '👧', '👦', '👨', '👩', '👱', '👵', '👴', 
+'👣', '🌴', '🌊', '🌅', '🌄', '🌠', '💫', 
+'✨', '🌟', '💫', '🌈', '💫', '💫', 
+'🎮', '📱', '💻', '🖥️', '🔌', '🔌', 
+'🍕', '🍔', '🍟', '🍝', '🍜', '🍲', 
+'🎂', '🍰', '🍪', '🍫', '🍎', '🍏', 
+'🍷', '🍸', '🍹', '🍺', '🍻', 
+'🚗', '🚘', '🚖', '✈️', '🚢', '🚄', 
+'🏠', '🏰', '🏗️', '🏢', '🏦', '🏫', 
+'🏷️', '🛍️', '🏪', '🏬', '🏦', 
+'🎯', '🏆', '🥇', '🥈', '🥉', '🏅', 
+'🎭', '🎬', '🎪', '🎢', '🎮', 
+'🎲', '🎯', '🎮', '🎰', '🎪', 
+'🎧', '🎼', '🎹', '🎸', '🎺', 
+'🎵', '🎶', '🎧', '🎼', '🎹', 
+'🎨', '🖼️', '🖍️', '🖊️', '🖋️', 
+'📝', '📄', '📰', '📋', '📇', 
+'📅', '📆', '📅', '📆', '📅', 
+'📊', '📈', '📉', '📊', '📈', 
+'🔍', '🔎', '🔍', '🔎', '🔍', 
+'🔧', '🔨', '🔩', '🔨', '🔧', 
+'🛠️', '🛠️', '🛠️', '🛠️', '🛠️']
+ %}
+            <button onclick="addReaction('{{ emoji }}')" 
+                    class="text-2xl p-2 rounded hover:bg-gray-700 transition-colors">
+                {{ emoji }}
+            </button>
+            {% endfor %}
+        </div>
+        
+        <div class="flex justify-end">
+            <button onclick="closeEmojiPicker()" 
+                    class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg">
+                Закрыть
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
 // Global variables
 let currentMessageId = null;
 let currentReplyTo = null;
 let currentEditId = null;
+let currentReactionMessageId = null;
 
 // Auto-resize textarea
 function autoResize(textarea) {
@@ -669,6 +738,70 @@ function updatePollDisplay(messageId, options, totalVotes) {
     }
 }
 
+// Эмодзи-реакции
+function showEmojiPicker(messageId) {
+    currentReactionMessageId = messageId;
+    document.getElementById('emojiPickerModal').classList.remove('hidden');
+}
+
+function closeEmojiPicker() {
+    document.getElementById('emojiPickerModal').classList.add('hidden');
+    currentReactionMessageId = null;
+}
+
+function addReaction(emoji) {
+    if (currentReactionMessageId) {
+        fetch('/add_reaction/{{ room_name }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message_id: currentReactionMessageId,
+                emoji: emoji
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Ошибка: ' + data.error);
+            }
+        });
+    }
+    closeEmojiPicker();
+}
+
+function toggleReaction(messageId, emoji) {
+    fetch('/toggle_reaction/{{ room_name }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            message_id: messageId,
+            emoji: emoji
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Ошибка: ' + data.error);
+        }
+    });
+}
+
+// Закрыть пикер эмодзи по клику вне его
+document.addEventListener('click', function(e) {
+    const emojiPicker = document.getElementById('emojiPickerModal');
+    if (emojiPicker && !emojiPicker.contains(e.target) && !e.target.closest('[onclick*="showEmojiPicker"]')) {
+        closeEmojiPicker();
+    }
+});
+
 // Initial setup
 window.addEventListener('load', function() {
     scrollToBottom();
@@ -725,6 +858,29 @@ if (messageTextarea) {
 
 .message {
     transition: all 0.2s ease;
+}
+
+.emoji {
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+/* Стили для скроллбара в пикере эмодзи */
+#emojiPickerModal div::-webkit-scrollbar {
+    width: 6px;
+}
+
+#emojiPickerModal div::-webkit-scrollbar-track {
+    background: #374151;
+    border-radius: 3px;
+}
+
+#emojiPickerModal div::-webkit-scrollbar-thumb {
+    background: #0D9489;
+    border-radius: 3px;
+}
+
+#emojiPickerModal div::-webkit-scrollbar-thumb:hover {
+    background: #0F766E;
 }
 
 @media (max-width: 768px) {
