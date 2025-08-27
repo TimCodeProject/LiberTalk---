@@ -1,4 +1,4 @@
-﻿from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_from_directory
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_from_directory
 import json
 import os
 import base64
@@ -7,6 +7,7 @@ import uuid
 from datetime import datetime
 from PIL import Image
 import io
+from flask_socketio import SocketIO, emit, join_room, leave_room
 
 app = Flask(__name__)
 app.secret_key = 'libertalk-secret-key-2024'
@@ -14,11 +15,15 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['AVATAR_FOLDER'] = 'static/avatars'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
+# Инициализация SocketIO
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+
 ALLOWED_EXTENSIONS = {
     'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx',
     'mp3', 'wav', 'ogg', 'm4a',  # Аудио
     'mp4', 'webm', 'mov', 'avi'  # Видео
 }
+
 # Константы для голосовых сообщений
 MAX_VOICE_DURATION = 30
 ALLOWED_AUDIO_EXTENSIONS = {'mp3', 'wav', 'ogg', 'm4a', 'webm'}
@@ -105,6 +110,256 @@ def get_user_role(room_name, username):
         elif username in room.get('moderators', []):
             return 'moderator'
     return 'user'
+
+# WebSocket обработчики
+@socketio.on('connect')
+def handle_connect():
+    if 'username' in session:
+        print(f"User {session['username']} connected")
+        emit('connection_response', {'status': 'connected', 'user': session['username']})
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    if 'username' in session:
+        print(f"User {session['username']} disconnected")
+
+@socketio.on('join_room')
+def handle_join_room(data):
+    room_name = data.get('room_name')
+    if room_name and 'username' in session:
+        join_room(room_name)
+        print(f"User {session['username']} joined room {room_name}")
+        emit('user_joined', {
+            'user': session['username'],
+            'message': f"{session['username']} присоединился к комнате"
+        }, room=room_name)
+
+@socketio.on('leave_room')
+def handle_leave_room(data):
+    room_name = data.get('room_name')
+    if room_name and 'username' in session:
+        leave_room(room_name)
+        print(f"User {session['username']} left room {room_name}")
+        emit('user_left', {
+            'user': session['username'],
+            'message': f"{session['username']} покинул комнату"
+        }, room=room_name)
+
+@socketio.on('send_message')
+def handle_send_message(data):
+    if 'username' not in session:
+        return
+    
+    room_name = data.get('room_name')
+    message_content = data.get('message')
+    message_type = data.get('type', 'text')
+    
+    if not room_name or not message_content:
+        return
+    
+    rooms = load_json('rooms.json')
+    if room_name not in rooms:
+        return
+    
+    room_data = rooms[room_name]
+    
+    # Создаем новое сообщение
+    new_message = {
+        'id': str(uuid.uuid4()),
+        'type': message_type,
+        'username': session['username'],
+        'avatar': session.get('avatar', 'default_avatar.jpg'),
+        'message': message_content,
+        'timestamp': datetime.now().isoformat(),
+        'role': get_user_role(room_name, session['username']),
+        'reactions': {}
+    }
+    
+    # Добавляем сообщение в комнату
+    if 'messages' not in room_data:
+        room_data['messages'] = []
+    room_data['messages'].append(new_message)
+    
+    # Сохраняем изменения
+    rooms[room_name] = room_data
+    save_json('rooms.json', rooms)
+    
+    # Отправляем сообщение всем в комнате
+    emit('new_message', {
+        'message': new_message,
+        'room': room_name
+    }, room=room_name)
+
+@socketio.on('add_reaction')
+def handle_add_reaction(data):
+    if 'username' not in session:
+        return
+    
+    room_name = data.get('room_name')
+    message_id = data.get('message_id')
+    emoji = data.get('emoji')
+    
+    if not all([room_name, message_id, emoji]):
+        return
+    
+    rooms = load_json('rooms.json')
+    if room_name not in rooms:
+        return
+    
+    room_data = rooms[room_name]
+    
+    # Находим сообщение и добавляем реакцию
+    for message in room_data.get('messages', []):
+        if message['id'] == message_id:
+            if 'reactions' not in message:
+                message['reactions'] = {}
+            if emoji not in message['reactions']:
+                message['reactions'][emoji] = []
+            if session['username'] not in message['reactions'][emoji]:
+                message['reactions'][emoji].append(session['username'])
+            
+            # Сохраняем изменения
+            rooms[room_name] = room_data
+            save_json('rooms.json', rooms)
+            
+            # Отправляем обновление всем в комнате
+            emit('reaction_added', {
+                'message_id': message_id,
+                'emoji': emoji,
+                'user': session['username'],
+                'reactions': message['reactions']
+            }, room=room_name)
+            break
+
+@socketio.on('remove_reaction')
+def handle_remove_reaction(data):
+    if 'username' not in session:
+        return
+    
+    room_name = data.get('room_name')
+    message_id = data.get('message_id')
+    emoji = data.get('emoji')
+    
+    if not all([room_name, message_id, emoji]):
+        return
+    
+    rooms = load_json('rooms.json')
+    if room_name not in rooms:
+        return
+    
+    room_data = rooms[room_name]
+    
+    # Находим сообщение и удаляем реакцию
+    for message in room_data.get('messages', []):
+        if message['id'] == message_id and 'reactions' in message and emoji in message['reactions']:
+            if session['username'] in message['reactions'][emoji]:
+                message['reactions'][emoji].remove(session['username'])
+                # Если больше нет реакций для этого эмодзи, удаляем его
+                if not message['reactions'][emoji]:
+                    del message['reactions'][emoji]
+                
+                # Сохраняем изменения
+                rooms[room_name] = room_data
+                save_json('rooms.json', rooms)
+                
+                # Отправляем обновление всем в комнате
+                emit('reaction_removed', {
+                    'message_id': message_id,
+                    'emoji': emoji,
+                    'user': session['username'],
+                    'reactions': message['reactions']
+                }, room=room_name)
+            break
+
+@socketio.on('vote_poll')
+def handle_vote_poll(data):
+    if 'username' not in session:
+        return
+    
+    room_name = data.get('room_name')
+    message_id = data.get('message_id')
+    option_index = data.get('option_index')
+    
+    if not all([room_name, message_id, option_index is not None]):
+        return
+    
+    rooms = load_json('rooms.json')
+    if room_name not in rooms:
+        return
+    
+    room_data = rooms[room_name]
+    
+    # Находим сообщение с опросом
+    for message in room_data.get('messages', []):
+        if message['id'] == message_id and message['type'] == 'poll':
+            # Проверяем, не голосовал ли уже пользователь
+            if session['username'] in message['voters']:
+                return
+            
+            # Проверяем валидность option_index
+            if not 0 <= option_index < len(message['options']):
+                return
+            
+            # Обновляем голоса
+            message['options'][option_index]['votes'] += 1
+            message['options'][option_index]['voters'].append(session['username'])
+            message['total_votes'] += 1
+            message['voters'].append(session['username'])
+            
+            # Сохраняем изменения
+            rooms[room_name] = room_data
+            save_json('rooms.json', rooms)
+            
+            # Отправляем обновление всем в комнате
+            emit('poll_updated', {
+                'message_id': message_id,
+                'options': message['options'],
+                'total_votes': message['total_votes'],
+                'voter': session['username']
+            }, room=room_name)
+            break
+
+@socketio.on('delete_message')
+def handle_delete_message(data):
+    if 'username' not in session:
+        return
+    
+    room_name = data.get('room_name')
+    message_id = data.get('message_id')
+    
+    if not all([room_name, message_id]):
+        return
+    
+    # Проверяем права пользователя
+    if not is_room_admin(room_name, session['username']):
+        # Проверяем, является ли пользователь автором сообщения
+        rooms = load_json('rooms.json')
+        if room_name in rooms:
+            for message in rooms[room_name].get('messages', []):
+                if message['id'] == message_id and message['username'] != session['username']:
+                    return
+    
+    rooms = load_json('rooms.json')
+    if room_name not in rooms:
+        return
+    
+    room_data = rooms[room_name]
+    
+    # Удаляем сообщение
+    for i, message in enumerate(room_data.get('messages', [])):
+        if message['id'] == message_id:
+            del room_data['messages'][i]
+            
+            # Сохраняем изменения
+            rooms[room_name] = room_data
+            save_json('rooms.json', rooms)
+            
+            # Отправляем уведомление об удалении
+            emit('message_deleted', {
+                'message_id': message_id,
+                'deleted_by': session['username']
+            }, room=room_name)
+            break
 
 @app.route('/')
 def index():
@@ -334,7 +589,8 @@ def room(room_name):
                 'message': message,
                 'file': file_data,
                 'timestamp': datetime.now().isoformat(),
-                'role': get_user_role(room_name, session['username'])
+                'role': get_user_role(room_name, session['username']),
+                'reactions': {}
             }
         
         # Обработка голосовых сообщений
@@ -345,16 +601,13 @@ def room(room_name):
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 voice_file.save(file_path)
                 
-                # Здесь можно добавить проверку длительности аудио
-                # (требует дополнительных библиотек типа mutagen)
-                
                 new_message = {
                     'id': str(uuid.uuid4()),
                     'type': 'voice',
                     'username': session['username'],
                     'avatar': session.get('avatar', 'default_avatar.jpg'),
                     'voice_path': filename,
-                    'duration': MAX_VOICE_DURATION,  # Можно определить реальную длительность
+                    'duration': MAX_VOICE_DURATION,
                     'timestamp': datetime.now().isoformat(),
                     'role': get_user_role(room_name, session['username'])
                 }
@@ -392,6 +645,12 @@ def room(room_name):
         room_data['messages'].append(new_message)
         rooms[room_name] = room_data
         save_json('rooms.json', rooms)
+        
+        # Отправляем через WebSocket
+        socketio.emit('new_message', {
+            'message': new_message,
+            'room': room_name
+        }, room=room_name)
         
         return redirect(url_for('room', room_name=room_name))
     
@@ -518,10 +777,21 @@ def message_action(room_name):
         if message['id'] == message_id:
             if action == 'delete':
                 room_data['messages'].remove(message)
+                # Отправляем уведомление через WebSocket
+                socketio.emit('message_deleted', {
+                    'message_id': message_id,
+                    'deleted_by': session['username']
+                }, room=room_name)
             elif action == 'edit' and new_text:
                 message['message'] = new_text
                 message['edited'] = True
                 message['edit_timestamp'] = datetime.now().isoformat()
+                # Отправляем обновление через WebSocket
+                socketio.emit('message_edited', {
+                    'message_id': message_id,
+                    'new_text': new_text,
+                    'edited_by': session['username']
+                }, room=room_name)
             break
     
     rooms[room_name] = room_data
@@ -634,6 +904,14 @@ def vote_poll(room_name, message_id):
             rooms[room_name] = room_data
             save_json('rooms.json', rooms)
             
+            # Отправляем обновление через WebSocket
+            socketio.emit('poll_updated', {
+                'message_id': message_id,
+                'options': message['options'],
+                'total_votes': message['total_votes'],
+                'voter': session['username']
+            }, room=room_name)
+            
             return jsonify({
                 'success': True,
                 'options': message['options'],
@@ -642,6 +920,114 @@ def vote_poll(room_name, message_id):
     
     return jsonify({'error': 'Poll not found'}), 404
 
+@app.route('/add_reaction/<room_name>', methods=['POST'])
+def add_reaction(room_name):
+    if 'username' not in session:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    message_id = request.json.get('message_id')
+    emoji = request.json.get('emoji')
+    
+    if not message_id or not emoji:
+        return jsonify({'error': 'Missing parameters'}), 400
+    
+    rooms = load_json('rooms.json')
+    if room_name not in rooms:
+        return jsonify({'error': 'Room not found'}), 404
+    
+    room_data = rooms[room_name]
+    
+    # Находим сообщение
+    for message in room_data.get('messages', []):
+        if message['id'] == message_id:
+            # Инициализируем объект реакций если его нет
+            if 'reactions' not in message:
+                message['reactions'] = {}
+            
+            # Инициализируем массив для этого эмодзи если его нет
+            if emoji not in message['reactions']:
+                message['reactions'][emoji] = []
+            
+            # Добавляем пользователя в реакцию если его там еще нет
+            if session['username'] not in message['reactions'][emoji]:
+                message['reactions'][emoji].append(session['username'])
+            
+            rooms[room_name] = room_data
+            save_json('rooms.json', rooms)
+            
+            # Отправляем через WebSocket
+            socketio.emit('reaction_added', {
+                'message_id': message_id,
+                'emoji': emoji,
+                'user': session['username'],
+                'reactions': message['reactions']
+            }, room=room_name)
+            
+            return jsonify({'success': True})
+    
+    return jsonify({'error': 'Message not found'}), 404
+
+@app.route('/toggle_reaction/<room_name>', methods=['POST'])
+def toggle_reaction(room_name):
+    if 'username' not in session:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    message_id = request.json.get('message_id')
+    emoji = request.json.get('emoji')
+    
+    if not message_id or not emoji:
+        return jsonify({'error': 'Missing parameters'}), 400
+    
+    rooms = load_json('rooms.json')
+    if room_name not in rooms:
+        return jsonify({'error': 'Room not found'}), 404
+    
+    room_data = rooms[room_name]
+    
+    # Находим сообщение
+    for message in room_data.get('messages', []):
+        if message['id'] == message_id:
+            # Инициализируем объект реакций если его нет
+            if 'reactions' not in message:
+                message['reactions'] = {}
+            
+            # Инициализируем массив для этого эмодзи если его нет
+            if emoji not in message['reactions']:
+                message['reactions'][emoji] = []
+            
+            # Переключаем реакцию пользователя
+            if session['username'] in message['reactions'][emoji]:
+                # Удаляем реакцию
+                message['reactions'][emoji].remove(session['username'])
+                # Если больше нет реакций для этого эмодзи, удаляем его
+                if not message['reactions'][emoji]:
+                    del message['reactions'][emoji]
+                
+                # Отправляем через WebSocket
+                socketio.emit('reaction_removed', {
+                    'message_id': message_id,
+                    'emoji': emoji,
+                    'user': session['username'],
+                    'reactions': message['reactions']
+                }, room=room_name)
+            else:
+                # Добавляем реакцию
+                message['reactions'][emoji].append(session['username'])
+                
+                # Отправляем через WebSocket
+                socketio.emit('reaction_added', {
+                    'message_id': message_id,
+                    'emoji': emoji,
+                    'user': session['username'],
+                    'reactions': message['reactions']
+                }, room=room_name)
+            
+            rooms[room_name] = room_data
+            save_json('rooms.json', rooms)
+            return jsonify({'success': True})
+    
+    return jsonify({'error': 'Message not found'}), 404
+
 if __name__ == '__main__':
     # Create necessary JSON files if they don't exist
     if not os.path.exists('users.json'):
@@ -649,4 +1035,5 @@ if __name__ == '__main__':
     if not os.path.exists('rooms.json'):
         save_json('rooms.json', {})
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Запускаем SocketIO вместо стандартного app.run()
+    socketio.run(app, debug=True, host='0.0.0.0', port=5000)
